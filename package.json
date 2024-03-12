@@ -14,7 +14,7 @@
     "@mantine/form": "^7.6.1",
     "@mantine/hooks": "^7.6.1",
     "@tauri-apps/api": "^1",
-    "csv-parse": "^5.5.5",
+    "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
