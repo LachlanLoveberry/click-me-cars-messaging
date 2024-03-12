@@ -14,9 +14,9 @@
     "@mantine/form": "^7.6.1",
     "@mantine/hooks": "^7.6.1",
     "@tauri-apps/api": "^1",
-    "papaparse": "^5.4.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-papaparse": "^4.4.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1",

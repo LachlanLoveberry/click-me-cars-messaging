@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "clickme-cars",
-    "version": "0.0.0"
+    "productName": "ClickMe Cars Messaging",
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
@@ -19,9 +19,9 @@
     },
     "windows": [
       {
-        "title": "clickme-cars",
-        "width": 800,
-        "height": 600
+        "title": "ClickMe Cars Messaging",
+        "width": 960,
+        "height": 1280
       }
     ],
     "security": {
