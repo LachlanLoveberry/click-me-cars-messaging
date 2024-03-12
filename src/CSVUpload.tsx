@@ -2,7 +2,7 @@ import { FileInput } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useEffect, useState } from "react";
 import { usePapaParse } from "react-papaparse";
-import { PayeeData } from "./App";
+import { PayeeData } from "./types";
 
 type InvoiceRow = {
   "Due Date": string;
@@ -25,7 +25,7 @@ function removeRedundant(text: string) {
   lines = lines.slice(6);
 
   // Remove the cells at index 3-8 from each line
-  lines = lines.map((line, index) => {
+  lines = lines.map((line) => {
     const cells = line.split(",");
     return cells.slice(0, 3).concat(cells.slice(9)).join(",");
   });
@@ -114,6 +114,7 @@ export function CSVUpload({ onSuccessfulUpload, onClear }: CSVUploadProps) {
           });
           if (error) setError(error);
           else setError(null);
+          // @ts-ignore
           const payeesData = getPayeesData(parsed.data.slice(6));
           onSuccessfulUpload(payeesData);
         }
