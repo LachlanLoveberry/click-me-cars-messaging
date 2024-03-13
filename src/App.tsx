@@ -1,22 +1,37 @@
 import { Container } from "@mantine/core";
-import { useListState } from "@mantine/hooks";
+import { UseListStateHandlers, useListState } from "@mantine/hooks";
+import { ReactNode, createContext } from "react";
 import { CSVUpload } from "./CSVUpload";
-import { MessageRow } from "./MessageRow";
-import { PayeeData } from "./types";
+import { MessageRows } from "./MessageRows";
+import { MessageRowState } from "./types";
 
-function App() {
-  const [payees, listHandlers] = useListState<PayeeData>();
+interface MessageRowContextValue {
+  data: MessageRowState[];
+  handlers: UseListStateHandlers<MessageRowState>;
+}
+
+export const MessageRowContext = createContext<MessageRowContextValue>(
+  {} as MessageRowContextValue,
+);
+
+function MessageRowContextProvider({ children }: { children: ReactNode }) {
+  const [data, handlers] = useListState<MessageRowState>([]);
 
   return (
-    <Container mih="100vh">
-      <CSVUpload
-        onClear={() => listHandlers.setState([])}
-        onSuccessfulUpload={listHandlers.setState}
-      />
-      {payees.map((data, index) => (
-        <MessageRow payeeData={data} index={index} />
-      ))}
-    </Container>
+    <MessageRowContext.Provider value={{ data, handlers }}>
+      {children}
+    </MessageRowContext.Provider>
+  );
+}
+
+function App() {
+  return (
+    <MessageRowContextProvider>
+      <Container mih="100vh">
+        <CSVUpload />
+        <MessageRows />
+      </Container>
+    </MessageRowContextProvider>
   );
 }
 
