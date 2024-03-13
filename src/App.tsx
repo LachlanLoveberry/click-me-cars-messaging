@@ -3,11 +3,11 @@ import { UseListStateHandlers, useListState } from "@mantine/hooks";
 import { ReactNode, createContext } from "react";
 import { CSVUpload } from "./CSVUpload";
 import { MessageRows } from "./MessageRows";
-import { MessageRowState } from "./types";
+import { PayeeMessagingState } from "./types";
 
 interface MessageRowContextValue {
-  data: MessageRowState[];
-  handlers: UseListStateHandlers<MessageRowState>;
+  data: PayeeMessagingState[];
+  handlers: UseListStateHandlers<PayeeMessagingState>;
 }
 
 export const MessageRowContext = createContext<MessageRowContextValue>(
@@ -15,7 +15,7 @@ export const MessageRowContext = createContext<MessageRowContextValue>(
 );
 
 function MessageRowContextProvider({ children }: { children: ReactNode }) {
-  const [data, handlers] = useListState<MessageRowState>([]);
+  const [data, handlers] = useListState<PayeeMessagingState>([]);
 
   return (
     <MessageRowContext.Provider value={{ data, handlers }}>

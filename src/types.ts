@@ -17,7 +17,7 @@ export type MessageRowProps = {
   index: number;
 };
 
-export type MessageRowState = {
+export type PayeeMessagingState = {
   messageData: MessageData | { name: string };
   errors?: string[];
 };
