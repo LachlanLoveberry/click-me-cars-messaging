@@ -1,8 +1,31 @@
-// TODO: Change format, where to define dates and such and in what format?
-export type PayeeData = {
-  name?: string;
-  tollTotal?: number;
-  otherTotal?: number;
-  subscriptionTotal?: number;
-  daysOverdue?: number;
+export type InvoicesSummary = {
+  total: number;
+  dueDate?: Date;
+};
+
+export type MessageData = {
+  name: string;
+  mobile: string;
+  toll: InvoicesSummary;
+  other: InvoicesSummary;
+  subscription: InvoicesSummary;
+};
+
+export type MessageRowProps = {
+  messageData: MessageData;
+  errors?: string[];
+  index: number;
+};
+
+export type MessageRowState = {
+  messageData: MessageData | { name: string };
+  errors?: string[];
+};
+
+export type InvoiceRow = {
+  "Due Date": string;
+  "Invoice Number": string;
+  "Invoice Reference": string;
+  Total: string;
+  Mobile: string;
 };
