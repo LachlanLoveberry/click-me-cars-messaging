@@ -1,137 +1,68 @@
-import { FileInput } from "@mantine/core";
+import { FileInput, Text } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { usePapaParse } from "react-papaparse";
-import { PayeeData } from "./types";
+import { MessageRowContext } from "./App";
+import { getPayeesData } from "./getPayeeData";
+import { removeRedundantRows } from "./removeRedundantRows";
+import { InvoiceRow } from "./types";
 
-type InvoiceRow = {
-  "Due Date": string;
-  "Invoice Number": string;
-  "Invoice Reference": string;
-  Total: string;
-};
+type CSVUploadProps = {};
 
-type InvoiceData = {
-  due: Date;
-  id: string;
-  ref: string;
-  total: number;
-};
-
-function removeRedundant(text: string) {
-  var lines = text.split("\r\n");
-
-  // Remove the first 6 lines
-  lines = lines.slice(6);
-
-  // Remove the cells at index 3-8 from each line
-  lines = lines.map((line) => {
-    const cells = line.split(",");
-    return cells.slice(0, 3).concat(cells.slice(9)).join(",");
-  });
-
-  // Filter any lines that are just commas
-  lines = lines.filter((line) => !line.endsWith(",,,"));
-
-  // Join the remaining lines back into a string
-  return lines.join("\n");
-}
-
-const isToll = (data: InvoiceData) => data.ref.toLowerCase().includes("toll");
-const isOther = (data: InvoiceData) => data.ref.toLowerCase().includes("toll");
-
-function calculatePayeeData(group: InvoiceData[], name?: string): PayeeData {
-  const ppo = group.some((invoice) => invoice.ref.includes("PPO"));
-  const ppt = group.some((invoice) => invoice.ref.includes("PPT"));
-  var tollTotal = 0;
-  var otherTotal = 0;
-  if (!ppt)
-    group.filter(isToll).forEach((invoice) => (tollTotal += invoice.total));
-  if (!ppo)
-    group.filter(isOther).forEach((invoice) => (tollTotal += invoice.total));
-  const subscriptionTotal =
-    group.find((invoice) => invoice.ref.toLowerCase().includes("SB"))?.total ??
-    0;
-
-  return {
-    name,
-    tollTotal,
-    otherTotal,
-    subscriptionTotal,
-  };
-}
-
-function getPayeesData(invoiceRows: InvoiceRow[]): PayeeData[] {
-  const groups: PayeeData[] = [];
-  let currentGroup: InvoiceData[] = [];
-
-  invoiceRows.forEach((row, index) => {
-    if (index === 0) return;
-    const endOfRow = row["Due Date"].includes("^");
-
-    if (endOfRow) {
-      // get all text after carrot on due date
-      const name = row["Due Date"].split("^")[1];
-      const payeeData = calculatePayeeData(currentGroup, name);
-      groups.push(payeeData);
-      currentGroup = [];
-      return;
-    }
-
-    const invoiceData: InvoiceData = {
-      due: new Date(row["Due Date"]) ?? "",
-      id: row["Invoice Number"],
-      ref: row["Invoice Reference"],
-      total: parseFloat(row.Total),
-    };
-
-    currentGroup.push(invoiceData);
-  });
-
-  return groups;
-}
-
-type CSVUploadProps = {
-  onSuccessfulUpload: (data: PayeeData[]) => void;
-  onClear: () => void;
-};
-
-export function CSVUpload({ onSuccessfulUpload, onClear }: CSVUploadProps) {
+export function CSVUpload({}: CSVUploadProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<React.ReactNode | null>(null);
+  const [errors, setErrors] = useState<Omit<Error, "name">[]>([]);
   const { readString } = usePapaParse();
+  const { handlers } = useContext(MessageRowContext);
 
+  // Handle Submit
   useEffect(() => {
     if (file) {
       async function parseCSV() {
         const text = await file?.text();
-
         if (text) {
-          const newText = removeRedundant(text);
-          const parsed = readString<InvoiceRow[]>(newText, {
+          const newText = removeRedundantRows(text);
+          readString<InvoiceRow>(newText, {
             header: true,
-            complete: () => {},
+            complete: ({ data, errors }) => {
+              if (errors?.length) setErrors(errors);
+              else {
+                setErrors([]);
+                const necessaryFields = data.map((invoice) => ({
+                  "Due Date": invoice["Due Date"],
+                  "Invoice Number": invoice["Invoice Number"],
+                  "Invoice Reference": invoice["Invoice Reference"],
+                  Total: invoice["Total"],
+                  Mobile: invoice["Mobile"],
+                }));
+                const payeesData = getPayeesData(necessaryFields);
+                handlers.setState(payeesData);
+              }
+            },
           });
-          if (error) setError(error);
-          else setError(null);
-          // @ts-ignore
-          const payeesData = getPayeesData(parsed.data.slice(6));
-          onSuccessfulUpload(payeesData);
         }
       }
       parseCSV();
-    } else onClear();
+    } else handlers.setState([]);
   }, [file]);
+
+  useEffect(() => {
+    if (errors) console.error(errors);
+  }, [errors]);
 
   return (
     <FileInput
       label="Upload Spreadsheet (.csv only)"
+      placeholder="No file selected"
       accept="text/csv"
       value={file}
       onChange={setFile}
+      error={
+        errors.length
+          ? errors.map(({ message }) => <Text c="red" children={message} />)
+          : null
+      }
       clearable
-      error={error}
-      placeholder="No file selected"
     />
   );
 }
