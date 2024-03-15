@@ -19,6 +19,7 @@ const isOtherDue = (data: InvoiceRow) => {
 };
 
 const isOtherIgnore = (data: InvoiceRow) => {
+  // @ts-ignore
   const ref = data["Invoice Reference"].toLowerCase().replace(/\s/g, "");
   return false;
 };

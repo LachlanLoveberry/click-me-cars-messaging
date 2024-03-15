@@ -1,13 +1,11 @@
-export function sendMessage({
+export async function sendMessage({
   message,
   mobile,
 }: {
   message: string;
   mobile: string;
 }) {
-  const contactNumber = "+61415127548";
-
-  return fetch("https://api.justcall.io/v2/texts/new", {
+  const response = await fetch("https://api.justcall.io/v2/texts/new", {
     method: "POST",
     headers: {
       Authorization:
@@ -18,8 +16,9 @@ export function sendMessage({
     body: JSON.stringify({
       justcall_number: "+61480029202",
       body: message,
-      contact_number: contactNumber,
+      contact_number: mobile,
       restrict_once: "Yes",
     }),
-  }).then((response) => response.json());
+  });
+  return await response.json();
 }

@@ -27,7 +27,7 @@ export function MessagingBox({
       <MessageHistoryPopup
         opened={opened}
         name={name}
-        mobile={mobile}
+        mobile={mobile!}
         onClose={close}
       />
       <Group key={index} justify="space-between">
@@ -39,7 +39,9 @@ export function MessagingBox({
           onChange={(e) => setMessage(e.target.value)}
         />
         <Flex direction="column" gap="sm">
-          <Button children="See Messages" variant="outline" onClick={open} />
+          {mobile && (
+            <Button children="See Messages" variant="outline" onClick={open} />
+          )}
           <Button children="Send" loading={active} onClick={start} />
           {active && (
             <Text onClick={stop} c="blue" td="underline" children="Undo" />

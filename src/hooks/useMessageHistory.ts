@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 export function useMessageHistory(mobile: string) {
   return useQuery<{ data: {}[] }>({
     queryFn: () => {
+      // @ts-ignore
       const contactNumber = JSON.stringify("+61415127548");
       return { data: [] };
       // return fetch(
