@@ -25,6 +25,7 @@ export function CSVUpload({}: CSVUploadProps) {
           readString<InvoiceRow>(newText, {
             header: true,
             comments: "#",
+            skipEmptyLines: true,
             complete: ({ data, errors }) => {
               if (errors?.length) setErrors(errors);
               else {
