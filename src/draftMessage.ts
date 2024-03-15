@@ -1,42 +1,42 @@
 import { MessageData } from "./types";
+import { calculateDaysOverdue } from "./utils/calculateDaysOverdue";
 import { formatDateWithoutYear } from "./utils/formatDate";
 
 const map = {
-  debt1: ({
-    other,
-    name,
-    subscription,
-    toll,
-    grandTotal,
-  }: MessageData) => `Hi ${name},
+  debt1: ({ other, name, subscription, toll, grandTotal }: MessageData) => {
+    if (!subscription.dueDate) return "";
+    return `Hi ${name},
 
 This is a friendly reminder that a payment of $${grandTotal} is now overdue.
-
+    
 ${
   subscription.total &&
   `$${subscription.total} due ${
     subscription.dueDate && "on " + formatDateWithoutYear(subscription.dueDate)
   } for subscription.\n`
 }${
-    toll.total
-      ? `\n$${toll.total} due ${
-          toll.dueDate
-            ? `on ${formatDateWithoutYear(toll.dueDate)} for toll`
-            : "for tolls"
-        }.\n`
-      : ""
-  }${
-    other.total
-      ? `\n$${other.total} due ${
-          other.dueDate
-            ? `on ${formatDateWithoutYear(other.dueDate)} for other due amount`
-            : "for other due amounts"
-        }.\n`
-      : ""
-  }
+      toll.total
+        ? `\n$${toll.total} due ${
+            toll.dueDate
+              ? `on ${formatDateWithoutYear(toll.dueDate)} for toll`
+              : "for tolls"
+          }.\n`
+        : ""
+    }${
+      other.total
+        ? `\n$${other.total} due ${
+            other.dueDate
+              ? `on ${formatDateWithoutYear(
+                  other.dueDate,
+                )} for other due amount`
+              : "for other due amounts"
+          }.\n`
+        : ""
+    }
 If you have already made payment and it simply has not reached our bank, thank you.
-
-ClickMe Cars`,
+    
+ClickMe Cars`;
+  },
 
   debt2: ({ grandTotal }: MessageData) => `Your account is now overdue.
 
@@ -75,11 +75,13 @@ ClickMe Cars`,
 };
 
 export function draftMessage(data: MessageData): string {
-  const daysOverdue = 1; // calculateDaysOverdue(data.subscription.dueDate!);
+  const daysOverdue = data.subscription.dueDate
+    ? calculateDaysOverdue(data.subscription.dueDate)
+    : 1;
 
   if (daysOverdue === 1 || daysOverdue === 2) return map.debt1(data);
-  // if (daysOverdue === 3 || daysOverdue === 4) return map.debt2(data);
-  // if (daysOverdue === 5 || daysOverdue === 6) return map.debt3A(data);
-  // if (daysOverdue > 7) return map.debt3R(data);
+  if (daysOverdue === 3 || daysOverdue === 4) return map.debt2(data);
+  if (daysOverdue === 5 || daysOverdue === 6) return map.debt3A(data);
+  if (daysOverdue > 7) return map.debt3R(data);
   else return "";
 }
