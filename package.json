@@ -13,7 +13,10 @@
     "@mantine/core": "^7.6.1",
     "@mantine/form": "^7.6.1",
     "@mantine/hooks": "^7.6.1",
+    "@tanstack/react-query": "^5.27.5",
     "@tauri-apps/api": "^1",
+    "api": "^6.1.1",
+    "decimal.js": "^10.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-papaparse": "^4.4.0"

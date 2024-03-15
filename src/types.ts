@@ -4,23 +4,37 @@ export type InvoicesSummary = {
 };
 
 export type MessageData = {
-  name: string;
-  mobile: string;
   toll: InvoicesSummary;
   other: InvoicesSummary;
   subscription: InvoicesSummary;
+  grandTotal: string;
+  name: string;
 };
 
-export type MessageRowProps = {
-  messageData: MessageData;
-  errors?: string[];
+export interface PayeeMessagingState {
+  name: string;
+  messageData?: {
+    toll: InvoicesSummary;
+    other: InvoicesSummary;
+    subscription: InvoicesSummary;
+    grandTotal: string;
+  };
+  errors: string[];
+  mobile?: string;
+}
+
+export interface MessageRowProps {
+  name: string;
+  messageData: {
+    toll: InvoicesSummary;
+    other: InvoicesSummary;
+    subscription: InvoicesSummary;
+    grandTotal: string;
+  };
+  errors: string[];
+  mobile?: string;
   index: number;
-};
-
-export type PayeeMessagingState = {
-  messageData: MessageData | { name: string };
-  errors?: string[];
-};
+}
 
 export type InvoiceRow = {
   "Due Date": string;

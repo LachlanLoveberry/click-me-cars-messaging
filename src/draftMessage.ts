@@ -1,44 +1,46 @@
 import { MessageData } from "./types";
+import { formatDateWithoutYear } from "./utils/formatDate";
 
 const map = {
   debt1: ({
     other,
+    name,
     subscription,
     toll,
-  }: MessageData) => `This is a friendly reminder that a payment of $${
-    subscription.total + toll.total + other.total
-  } is now overdue.
+    grandTotal,
+  }: MessageData) => `Hi ${name},
 
-$${
-    subscription.total
-  } due on ${subscription.dueDate?.toDateString()} for subscription.
+This is a friendly reminder that a payment of $${grandTotal} is now overdue.
+
 ${
-  toll.total
-    ? `\n$${toll.total} due ${
-        toll.dueDate ? `on ${toll.dueDate} for toll` : "for tolls"
-      } \n.`
-    : ""
-}
-${
-  other.total
-    ? `\n$${other.total} due ${
-        other.dueDate
-          ? `on ${other.dueDate} for other due amount`
-          : "for other due amounts"
-      } \n.`
-    : ""
-}
+  subscription.total &&
+  `$${subscription.total} due ${
+    subscription.dueDate && "on " + formatDateWithoutYear(subscription.dueDate)
+  } for subscription.\n`
+}${
+    toll.total
+      ? `\n$${toll.total} due ${
+          toll.dueDate
+            ? `on ${formatDateWithoutYear(toll.dueDate)} for toll`
+            : "for tolls"
+        }.\n`
+      : ""
+  }${
+    other.total
+      ? `\n$${other.total} due ${
+          other.dueDate
+            ? `on ${formatDateWithoutYear(other.dueDate)} for other due amount`
+            : "for other due amounts"
+        }.\n`
+      : ""
+  }
 If you have already made payment and it simply has not reached our bank, thank you.
 
 ClickMe Cars`,
 
-  debt2: ({
-    other,
-    subscription,
-    toll,
-  }: MessageData) => `Your account is now overdue.
+  debt2: ({ grandTotal }: MessageData) => `Your account is now overdue.
 
-Payment required: ${subscription.total + toll.total + other.total}
+Payment required: ${grandTotal}
 
 If payment is not received today, we may charge you a $30 late payment fee and require you to return the car.
 
@@ -48,7 +50,7 @@ Please contact us if you need to discuss your account.
 
 ClickMe Cars`,
 
-  debt3A: ({ other, subscription, toll }: MessageData) => `URGENT:
+  debt3A: ({ grandTotal }: MessageData) => `URGENT:
 
 Due to non-payment, you must return the car to our office by 2pm (next day).
 
@@ -56,20 +58,16 @@ Please contact us to organise a return time. The car must be clean and refuelled
 
 We can hold the car for up to 7 days for you.
 
-Car return can be avoided by immediate payment of $${
-    subscription.total + toll.total + other.total
-  }
+Car return can be avoided by immediate payment of $${grandTotal}
 
 ClickMe Cars
 10 Northey Street, Windsor`,
 
-  debt3R: ({ other, subscription, toll }: MessageData) => `REMINDER:
+  debt3R: ({ grandTotal }: MessageData) => `REMINDER:
 
 Car return is required by 2pm today due to overdue subscription.
 
-Car return can be avoided by immediate payment of $${
-    subscription.total + toll.total + other.total
-  }
+Car return can be avoided by immediate payment of $${grandTotal}
 
 Would you please confirm what time you will be returning the car today?
 

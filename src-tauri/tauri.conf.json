@@ -21,7 +21,8 @@
       {
         "title": "ClickMe Cars Messaging",
         "width": 960,
-        "height": 1280
+        "height": 1280,
+        "additionalBrowserArgs": "--disable-web-security"
       }
     ],
     "security": {

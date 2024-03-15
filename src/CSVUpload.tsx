@@ -24,6 +24,7 @@ export function CSVUpload({}: CSVUploadProps) {
           const newText = removeRedundantRows(text);
           readString<InvoiceRow>(newText, {
             header: true,
+            comments: "#",
             complete: ({ data, errors }) => {
               if (errors?.length) setErrors(errors);
               else {
@@ -36,7 +37,13 @@ export function CSVUpload({}: CSVUploadProps) {
                   Mobile: invoice["Mobile"],
                 }));
                 const payeesData = getPayeesData(necessaryFields);
-                handlers.setState(payeesData);
+                const sortedPayeesData = payeesData.sort((a, b) =>
+                  a.name.localeCompare(b.name),
+                );
+                const filteredPayeesData = sortedPayeesData.filter(
+                  ({ messageData, errors }) => messageData || errors.length,
+                );
+                handlers.setState(filteredPayeesData);
               }
             },
           });
@@ -47,11 +54,13 @@ export function CSVUpload({}: CSVUploadProps) {
   }, [file]);
 
   useEffect(() => {
-    if (errors) console.error(errors);
+    if (errors.length) console.error(errors);
   }, [errors]);
 
   return (
     <FileInput
+      mt="xl"
+      mb="xl"
       label="Upload Spreadsheet (.csv only)"
       placeholder="No file selected"
       accept="text/csv"
