@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "../main";
 import { sendMessage } from "../sendMessage";
 
 export function useSendMessage() {
@@ -6,8 +7,10 @@ export function useSendMessage() {
     mutationFn: sendMessage,
     // @ts-ignore
     onSuccess: (data, variables) => {
-      // @ts-ignore
       const queryKey = ["getMessageHistory", variables.mobile];
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey });
+      }, 10_000);
     },
   });
 }
