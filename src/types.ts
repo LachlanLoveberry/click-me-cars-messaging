@@ -3,10 +3,15 @@ export type InvoicesSummary = {
   dueDate?: Date;
 };
 
+export type InvoicesSummaryOutput = {
+  total: string;
+  dueDate?: Date;
+};
+
 export type MessageData = {
-  toll: InvoicesSummary;
-  other: InvoicesSummary;
-  subscription: InvoicesSummary;
+  toll: InvoicesSummaryOutput;
+  other: InvoicesSummaryOutput;
+  subscription: InvoicesSummaryOutput;
   grandTotal: string;
   name: string;
 };
@@ -14,9 +19,9 @@ export type MessageData = {
 export interface PayeeMessagingState {
   name: string;
   messageData?: {
-    toll: InvoicesSummary;
-    other: InvoicesSummary;
-    subscription: InvoicesSummary;
+    toll: InvoicesSummaryOutput;
+    other: InvoicesSummaryOutput;
+    subscription: InvoicesSummaryOutput;
     grandTotal: string;
   };
   errors: string[];
@@ -26,9 +31,9 @@ export interface PayeeMessagingState {
 export interface MessageRowProps {
   name: string;
   messageData: {
-    toll: InvoicesSummary;
-    other: InvoicesSummary;
-    subscription: InvoicesSummary;
+    toll: InvoicesSummaryOutput;
+    other: InvoicesSummaryOutput;
+    subscription: InvoicesSummaryOutput;
     grandTotal: string;
   };
   errors: string[];

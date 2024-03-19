@@ -71,6 +71,16 @@ Car return can be avoided by immediate payment of $${grandTotal}
 Would you please confirm what time you will be returning the car today?
 
 ClickMe Cars`,
+  debt4: ({ name }: MessageData) => `Dear ${name},
+
+As payment has not been made and the car has not been returned to our office, we have now been directed to report the car stolen and provide your details to the police.
+
+This is not something we do lightly as we know a stolen vehicle charge carries a 7 year jail term.
+
+Would you please contact us urgently?
+
+Thanks
+ClickMe Cars`,
 };
 
 export function draftMessage(data: MessageData): string {
@@ -79,9 +89,10 @@ export function draftMessage(data: MessageData): string {
     : 1;
 
   if (!data.subscription.dueDate) return "";
-  if (daysOverdue === 1 || daysOverdue === 2) return map.debt1(data);
-  if (daysOverdue === 3 || daysOverdue === 4) return map.debt2(data);
-  if (daysOverdue === 5 || daysOverdue === 6) return map.debt3A(data);
-  if (daysOverdue > 7) return map.debt3R(data);
+  if (daysOverdue === 1) return map.debt1(data);
+  if (daysOverdue === 2) return map.debt2(data);
+  if (daysOverdue === 3) return map.debt3A(data);
+  if (daysOverdue === 4) return map.debt3R(data);
+  if (daysOverdue >= 5) return map.debt4(data);
   else return "";
 }

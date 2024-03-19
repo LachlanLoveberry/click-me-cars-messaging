@@ -43,6 +43,7 @@ export function MessagingBox({
         <Flex direction="column" gap="sm">
           <MobileInput
             value={mobile}
+            // @ts-ignore
             onChange={(e) => setMobile(e.target.value)}
           />
           {mobile && (

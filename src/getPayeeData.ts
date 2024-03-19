@@ -109,10 +109,13 @@ function calculateMessage(
       mobile,
       errors,
       messageData: {
-        toll,
-        other,
-        subscription,
-        grandTotal: grandTotal.toLocaleString(),
+        toll: { total: toll.total.toFixed(2), dueDate: toll.dueDate },
+        other: { total: other.total.toFixed(2), dueDate: other.dueDate },
+        subscription: {
+          total: subscription.total.toFixed(2),
+          dueDate: subscription.dueDate,
+        },
+        grandTotal: grandTotal.toFixed(2),
       },
     };
   } else
