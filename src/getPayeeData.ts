@@ -47,9 +47,7 @@ function calculateMessage(
   const subscription: InvoicesSummary = { total: 0 };
 
   const mobile = group.find((invoice) => invoice.Mobile)?.Mobile;
-  if (!mobile) {
-    errors.push(`No mobile number found for customer`);
-  }
+
   group.forEach((invoice) => {
     const due = new Date(invoice["Due Date"]);
 
@@ -104,6 +102,7 @@ function calculateMessage(
     .plus(other.total)
     .plus(subscription.total)
     .toNumber();
+
   if (subscriptionIsOverdue && grandTotal) {
     return {
       name,
