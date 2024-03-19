@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 export function useMessageHistory(mobile: string) {
   return useQuery<{ data: {}[] }>({
     queryFn: async () => {
-      return await fetch(
+      const response = await fetch(
         `https://api.justcall.io/v2/texts?contact_number=%2B${mobile}`,
         {
           method: "GET",
@@ -13,7 +13,10 @@ export function useMessageHistory(mobile: string) {
             accept: "application/json",
           },
         },
-      ).then((response) => response.json());
+      );
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.message);
+      return json;
     },
     queryKey: ["getMessageHistory", mobile],
   });
