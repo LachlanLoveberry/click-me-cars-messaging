@@ -23,12 +23,13 @@ export function MessageHistoryPopup({
 
   return (
     <Modal title={`Message history with ${name}`} {...rest}>
-      <Center h={96}>{isLoading && <Loader />}</Center>
       {error && <Text c="red">{error.message}</Text>}
+      <Center h={96}>{isLoading && <Loader />}</Center>
       {data && (
         <Flex direction="column" gap="md">
-          {data.data.map((message) => (
+          {data.data.map((message, index) => (
             <Box
+              key={index}
               style={{
                 backgroundColor:
                   message.direction === "outgoing" ? "lightgray" : "lightblue",
