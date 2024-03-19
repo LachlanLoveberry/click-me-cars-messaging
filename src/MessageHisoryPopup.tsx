@@ -11,13 +11,12 @@ export function MessageHistoryPopup({
   mobile,
   ...rest
 }: MessageHistoryPopup) {
-  const { data, isLoading } = useMessageHistory(mobile);
+  const { data, isLoading, status, error } = useMessageHistory(mobile);
+  console.log(data);
+
   return (
     <Modal title={`Message history with ${name}`} {...rest}>
-      <Center>
-        {isLoading && <Loader />}
-        {data?.data.map((x) => JSON.stringify(x))}
-      </Center>
+      <Center>{isLoading && <Loader />}</Center>
     </Modal>
   );
 }

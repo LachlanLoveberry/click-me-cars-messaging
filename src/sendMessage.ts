@@ -16,7 +16,7 @@ export async function sendMessage({
     body: JSON.stringify({
       justcall_number: "+61480029202",
       body: message,
-      contact_number: mobile,
+      contact_number: `+${mobile}`,
       restrict_once: "Yes",
     }),
   });

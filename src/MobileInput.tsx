@@ -14,7 +14,7 @@ export function MobileInput(
       <Input.Label>Mobile Number</Input.Label>
       <Input
         component={IMaskInput}
-        mask="+61000 000 000"
+        mask="+61 000 000 000"
         placeholder="Your phone"
         {...props}
       />

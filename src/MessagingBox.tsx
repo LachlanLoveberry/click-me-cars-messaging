@@ -26,12 +26,14 @@ export function MessagingBox({
 
   return (
     <>
-      <MessageHistoryPopup
-        opened={opened}
-        name={name}
-        mobile={mobile!}
-        onClose={close}
-      />
+      {opened && (
+        <MessageHistoryPopup
+          opened={opened}
+          name={name}
+          mobile={mobile!.replace(/\s/g, "")}
+          onClose={close}
+        />
+      )}
       <Group key={index} justify="space-between">
         <Textarea
           error={error ? <Text children={error.message} /> : null}

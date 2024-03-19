@@ -46,5 +46,5 @@ export type InvoiceRow = {
   "Invoice Number": string;
   "Invoice Reference": string;
   Total: string;
-  Mobile: string;
+  Phone: string;
 };

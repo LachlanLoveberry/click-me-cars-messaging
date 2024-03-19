@@ -46,7 +46,11 @@ function calculateMessage(
   const other: InvoicesSummary = { total: 0 };
   const subscription: InvoicesSummary = { total: 0 };
 
-  const mobile = group.find((invoice) => invoice.Mobile)?.Mobile;
+  let mobile = group.find((invoice) => invoice.Phone)?.Phone;
+  mobile = mobile
+    ?.replace(/australia/gi, "")
+    .replace(/\s/g, "")
+    .replace(/\+/g, "");
 
   group.forEach((invoice) => {
     const due = new Date(invoice["Due Date"]);
@@ -102,8 +106,9 @@ function calculateMessage(
     .plus(other.total)
     .plus(subscription.total)
     .toNumber();
-
-  if (subscriptionIsOverdue && grandTotal) {
+  if (!subscriptionIsOverdue && grandTotal > 0)
+    errors.push("Invoices overdue but subscripion is not");
+  if (grandTotal) {
     return {
       name,
       mobile,

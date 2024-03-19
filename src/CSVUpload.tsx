@@ -35,7 +35,7 @@ export function CSVUpload({}: CSVUploadProps) {
                   "Invoice Number": invoice["Invoice Number"],
                   "Invoice Reference": invoice["Invoice Reference"],
                   Total: invoice["Total"],
-                  Mobile: invoice["Mobile"],
+                  Phone: invoice["Phone"],
                 }));
                 const payeesData = getPayeesData(necessaryFields);
                 const sortedPayeesData = payeesData.sort((a, b) =>
