@@ -20,5 +20,7 @@ export async function sendMessage({
       restrict_once: "Yes",
     }),
   });
-  return await response.json();
+  const json = await response.json();
+  if (!response.ok) throw new Error(json.message);
+  return json;
 }
