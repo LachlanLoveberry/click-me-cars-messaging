@@ -11,7 +11,7 @@ type CSVUploadProps = {};
 
 export function CSVUpload({}: CSVUploadProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [errors, setErrors] = useState<Omit<Error, "name">[]>([]);
+  const [errors, setErrors] = useState<Error[]>([]);
   const { readString } = usePapaParse();
   const { handlers } = useContext(MessageRowContext);
 
@@ -19,44 +19,44 @@ export function CSVUpload({}: CSVUploadProps) {
   useEffect(() => {
     if (file) {
       async function parseCSV() {
-        const text = await file?.text();
-        if (text) {
-          const newText = removeRedundantRows(text);
-          readString<InvoiceRow>(newText, {
-            header: true,
-            comments: "#",
-            skipEmptyLines: true,
-            complete: ({ data, errors }) => {
-              if (errors?.length) setErrors(errors);
-              else {
-                setErrors([]);
-                const necessaryFields = data.map((invoice) => ({
-                  "Due Date": invoice["Due Date"],
-                  "Invoice Number": invoice["Invoice Number"],
-                  "Invoice Reference": invoice["Invoice Reference"],
-                  Total: invoice["Total"],
-                  Phone: invoice["Phone"],
-                }));
-                const payeesData = getPayeesData(necessaryFields);
-                const sortedPayeesData = payeesData.sort((a, b) =>
-                  a.name.localeCompare(b.name),
-                );
-                const filteredPayeesData = sortedPayeesData.filter(
-                  ({ messageData, errors }) => messageData || errors.length,
-                );
-                handlers.setState(filteredPayeesData);
-              }
-            },
-          });
+        try {
+          const text = await file?.text();
+          if (text) {
+            const newText = removeRedundantRows(text);
+            readString<InvoiceRow>(newText, {
+              header: true,
+              comments: "#",
+              skipEmptyLines: true,
+              complete: ({ data, errors }) => {
+                if (errors?.length) setErrors(errors);
+                else {
+                  setErrors([]);
+                  const necessaryFields = data.map((invoice) => ({
+                    "Due Date": invoice["Due Date"],
+                    "Invoice Number": invoice["Invoice Number"],
+                    "Invoice Reference": invoice["Invoice Reference"],
+                    Total: invoice["Total"],
+                    Phone: invoice["Phone"],
+                  }));
+                  const payeesData = getPayeesData(necessaryFields);
+                  const sortedPayeesData = payeesData.sort((a, b) =>
+                    a.name.localeCompare(b.name),
+                  );
+                  const filteredPayeesData = sortedPayeesData.filter(
+                    ({ messageData, errors }) => messageData || errors.length,
+                  );
+                  handlers.setState(filteredPayeesData);
+                }
+              },
+            });
+          }
+        } catch (error) {
+          setErrors((err) => [...err, error as Error]);
         }
       }
       parseCSV();
     } else handlers.setState([]);
   }, [file]);
-
-  useEffect(() => {
-    if (errors.length) console.error(errors);
-  }, [errors]);
 
   return (
     <FileInput
