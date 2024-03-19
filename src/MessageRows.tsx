@@ -18,6 +18,7 @@ export function MessageRows() {
             ))}
             {state.messageData && (
               <MessagingBox
+                mobile={state.mobile}
                 key={index}
                 messageData={state.messageData}
                 errors={state.errors}
