@@ -40,9 +40,15 @@ export function MessagingBox({
         />
         <Flex direction="column" gap="sm">
           {mobile && (
-            <Button children="See Messages" variant="outline" onClick={open} />
+            <>
+              <Button
+                children="See Messages"
+                variant="outline"
+                onClick={open}
+              />
+              <Button children="Send" loading={active} onClick={start} />
+            </>
           )}
-          <Button children="Send" loading={active} onClick={start} />
           {active && (
             <Text onClick={stop} c="blue" td="underline" children="Undo" />
           )}
