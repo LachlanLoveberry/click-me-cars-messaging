@@ -14,7 +14,7 @@ export function MessageRows() {
               {state.name}
             </Title>
             {state.errors?.map((error, index) => (
-              <Text key={index} c="red" children={error} />
+              <Text key={index} mb="xs" c="red" children={error} />
             ))}
             {state.messageData && (
               <MessagingBox
