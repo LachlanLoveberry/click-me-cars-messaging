@@ -4,7 +4,6 @@ import { formatDateWithoutYear } from "./utils/formatDate";
 
 const map = {
   debt1: ({ other, name, subscription, toll, grandTotal }: MessageData) => {
-    if (!subscription.dueDate) return "";
     return `Hi ${name},
 
 This is a friendly reminder that a payment of $${grandTotal} is now overdue.
@@ -79,6 +78,7 @@ export function draftMessage(data: MessageData): string {
     ? calculateDaysOverdue(data.subscription.dueDate)
     : 1;
 
+  if (!data.subscription.dueDate) return "";
   if (daysOverdue === 1 || daysOverdue === 2) return map.debt1(data);
   if (daysOverdue === 3 || daysOverdue === 4) return map.debt2(data);
   if (daysOverdue === 5 || daysOverdue === 6) return map.debt3A(data);

@@ -2,6 +2,7 @@ import { Button, Flex, Group, Text, Textarea } from "@mantine/core";
 import { useDisclosure, useInterval } from "@mantine/hooks";
 import { useState } from "react";
 import { MessageHistoryPopup } from "./MessageHisoryPopup";
+import { MobileInput } from "./MobileInput";
 import { draftMessage } from "./draftMessage";
 import { useSendMessage } from "./hooks/useSendMessage";
 import { MessageRowProps } from "./types";
@@ -9,7 +10,7 @@ import { MessageRowProps } from "./types";
 export function MessagingBox({
   index,
   messageData,
-  mobile,
+  mobile: initialMobile,
   name,
 }: MessageRowProps) {
   const [message, setMessage] = useState<string>(
@@ -17,9 +18,10 @@ export function MessagingBox({
   );
   const { mutate, error } = useSendMessage();
   const { start, stop, active } = useInterval(() => {
-    mutate({ message, mobile: mobile! });
+    mutate({ message, mobile: mobile!.replace(/\s/g, "") });
     stop();
   }, 10_000);
+  const [mobile, setMobile] = useState<string | undefined>(initialMobile);
   const [opened, { open, close }] = useDisclosure();
 
   return (
@@ -34,11 +36,15 @@ export function MessagingBox({
         <Textarea
           error={error ? <Text children={error.message} /> : null}
           autosize
-          w="75%"
+          w="65%"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
         <Flex direction="column" gap="sm">
+          <MobileInput
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+          />
           {mobile && (
             <>
               <Button
