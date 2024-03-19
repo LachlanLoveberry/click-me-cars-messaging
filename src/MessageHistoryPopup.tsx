@@ -19,11 +19,12 @@ export function MessageHistoryPopup({
   mobile,
   ...rest
 }: MessageHistoryPopup) {
-  const { data, isLoading } = useMessageHistory(mobile);
+  const { data, isLoading, error } = useMessageHistory(mobile);
 
   return (
     <Modal title={`Message history with ${name}`} {...rest}>
       <Center h={96}>{isLoading && <Loader />}</Center>
+      {error && <Text c="red">{error.message}</Text>}
       {data && (
         <Flex direction="column" gap="md">
           {data.data.map((message) => (
