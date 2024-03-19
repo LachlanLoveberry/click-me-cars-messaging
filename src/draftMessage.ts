@@ -9,12 +9,12 @@ const map = {
 This is a friendly reminder that a payment of $${grandTotal} is now overdue.
     
 ${
-  subscription.total &&
+  subscription.total !== "0.00" &&
   `$${subscription.total} due ${
     subscription.dueDate && "on " + formatDateWithoutYear(subscription.dueDate)
   } for subscription.\n`
 }${
-      toll.total
+      toll.total !== "0.00"
         ? `\n$${toll.total} due ${
             toll.dueDate
               ? `on ${formatDateWithoutYear(toll.dueDate)} for toll`
@@ -22,7 +22,7 @@ ${
           }.\n`
         : ""
     }${
-      other.total
+      other.total !== "0.00"
         ? `\n$${other.total} due ${
             other.dueDate
               ? `on ${formatDateWithoutYear(

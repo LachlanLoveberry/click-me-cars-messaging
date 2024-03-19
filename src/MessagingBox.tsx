@@ -1,4 +1,4 @@
-import { Button, Flex, Group, Text, Textarea } from "@mantine/core";
+import { Button, Flex, Text, Textarea } from "@mantine/core";
 import { useDisclosure, useInterval } from "@mantine/hooks";
 import { useState } from "react";
 import { MessageHistoryPopup } from "./MessageHisoryPopup";
@@ -13,6 +13,7 @@ export function MessagingBox({
   mobile: initialMobile,
   name,
 }: MessageRowProps) {
+  name = name.replace(/\^/g, "");
   const [message, setMessage] = useState<string>(
     draftMessage({ ...messageData, name }),
   );
@@ -34,11 +35,11 @@ export function MessagingBox({
           onClose={close}
         />
       )}
-      <Group key={index} justify="space-between">
+      <Flex key={index} justify="space-between">
         <Textarea
           error={error ? <Text children={error.message} /> : null}
           autosize
-          w="65%"
+          w="70%"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
@@ -62,7 +63,7 @@ export function MessagingBox({
             <Text onClick={stop} c="blue" td="underline" children="Undo" />
           )}
         </Flex>
-      </Group>
+      </Flex>
     </>
   );
 }

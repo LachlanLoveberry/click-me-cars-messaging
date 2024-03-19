@@ -70,7 +70,6 @@ function calculateMessage(
     }
 
     const isOverdue = isYesterdayOrOlder(due);
-
     if (isOverdue) {
       if (isToll(invoice)) {
         if (!ppt) {
@@ -144,7 +143,7 @@ export function getPayeesData(
       row["Invoice Reference"] === "";
 
     if (endOfRow) {
-      const name = row["Due Date"].split("Total ")[1].replace(/\^/g, "");
+      const name = row["Due Date"].split("Total ")[1];
       const res = calculateMessage(currentGroup, name);
       groups.push(res);
       currentGroup = [];
