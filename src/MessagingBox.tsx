@@ -1,7 +1,7 @@
 import { Button, Flex, Text, Textarea } from "@mantine/core";
 import { useDisclosure, useInterval } from "@mantine/hooks";
 import { useState } from "react";
-import { MessageHistoryPopup } from "./MessageHisoryPopup";
+import { MessageHistoryPopup } from "./MessageHistoryPopup";
 import { MobileInput } from "./MobileInput";
 import { draftMessage } from "./draftMessage";
 import { useSendMessage } from "./hooks/useSendMessage";
