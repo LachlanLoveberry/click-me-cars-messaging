@@ -40,7 +40,7 @@ ClickMe Cars`;
 
   debt2: ({ grandTotal }: MessageData) => `Your account is now overdue.
 
-Payment required: ${grandTotal}
+Payment required: $${grandTotal}
 
 If payment is not received today, we may charge you a $30 late payment fee and require you to return the car.
 
