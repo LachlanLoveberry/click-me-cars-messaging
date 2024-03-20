@@ -88,7 +88,6 @@ export function draftMessage(data: MessageData): string {
     ? calculateDaysOverdue(data.subscription.dueDate)
     : 1;
 
-  if (!data.subscription.dueDate) return "";
   if (daysOverdue === 1) return map.debt1(data);
   if (daysOverdue === 2) return map.debt2(data);
   if (daysOverdue === 3) return map.debt3A(data);
