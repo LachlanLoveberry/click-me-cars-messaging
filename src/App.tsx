@@ -27,7 +27,7 @@ function MessageRowContextProvider({ children }: { children: ReactNode }) {
 function App() {
   return (
     <MessageRowContextProvider>
-      <Container mih="100vh" maw={720}>
+      <Container mih="90vh" maw={720}>
         <CSVUpload />
         <MessageRows />
       </Container>
