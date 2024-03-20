@@ -40,9 +40,9 @@ export function MessageHistoryPopup({
                   message.direction === "outgoing" ? "flex-start" : "flex-end",
               }}
             >
-              <Text>{message.sms_info.body}</Text>
+              <Text>{message.sms_info.body.replace(/\\'/g, "'")}</Text>
               <Text size="xs" c="gray">
-                {message.sms_date} {message.sms_time}
+                {message.sms_date}
               </Text>
             </Box>
           ))}
