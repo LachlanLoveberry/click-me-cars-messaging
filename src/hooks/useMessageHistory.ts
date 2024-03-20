@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
 export function useMessageHistory(mobile: string) {
-  return useQuery<{ data: {}[] }>({
+  return useQuery<{ data: any[] }>({
     queryFn: async () => {
       const response = await fetch(
-        `https://api.justcall.io/v2/texts?contact_number=%2B${mobile}`,
+        `https://api.justcall.io/v2/texts?order=asc&contact_number=%2B${mobile}`,
         {
           method: "GET",
           headers: {
