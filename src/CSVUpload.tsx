@@ -28,9 +28,10 @@ export function CSVUpload({}: CSVUploadProps) {
               comments: "#",
               skipEmptyLines: true,
               complete: ({ data, errors }) => {
+                // @ts-ignore
                 if (errors?.length) setErrors(errors);
                 else {
-                  setErrors([]);
+                  if (errors.length) setErrors([]);
                   const necessaryFields = data.map((invoice) => ({
                     "Due Date": invoice["Due Date"],
                     "Invoice Number": invoice["Invoice Number"],
