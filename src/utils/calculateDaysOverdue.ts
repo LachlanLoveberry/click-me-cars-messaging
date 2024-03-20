@@ -11,5 +11,5 @@ export function calculateDaysOverdue(dueDate: Date): number {
     }
   }
 
-  return diffInDays - 1;
+  return diffInDays;
 }
