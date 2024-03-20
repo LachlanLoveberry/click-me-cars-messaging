@@ -106,7 +106,7 @@ function calculateMessage(
     .plus(subscription.total)
     .toNumber();
   if (!subscriptionIsOverdue && grandTotal > 0)
-    errors.push("Invoice(s) overdue but no subscription");
+    errors.push("Invoice(s) overdue but subscription is not");
   if (grandTotal) {
     return {
       name,
