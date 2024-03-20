@@ -30,7 +30,7 @@ export interface PayeeMessagingState {
 
 export interface MessageRowProps {
   name: string;
-  messageData: {
+  messageData?: {
     toll: InvoicesSummaryOutput;
     other: InvoicesSummaryOutput;
     subscription: InvoicesSummaryOutput;

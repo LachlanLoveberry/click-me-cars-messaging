@@ -16,16 +16,14 @@ export function MessageRows() {
             {state.errors?.map((error, index) => (
               <Text key={index} mb="xs" c="red" children={error} />
             ))}
-            {state.messageData && (
-              <MessagingBox
-                mobile={state.mobile}
-                key={index}
-                messageData={state.messageData}
-                errors={state.errors}
-                index={index}
-                name={state.name}
-              />
-            )}
+            <MessagingBox
+              mobile={state.mobile}
+              key={index}
+              messageData={state.messageData}
+              errors={state.errors}
+              index={index}
+              name={state.name}
+            />
           </Card>
         );
       })}
