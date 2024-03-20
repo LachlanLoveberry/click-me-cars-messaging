@@ -1,7 +1,7 @@
 import Decimal from "decimal.js";
 import { InvoiceRow, InvoicesSummary, PayeeMessagingState } from "./types";
+import { calculateDaysOverdue } from "./utils/calculateDaysOverdue";
 import { getTotal } from "./utils/getTotal";
-import { isYesterdayOrOlder } from "./utils/isYesterdayOrOlder";
 
 const isToll = (data: InvoiceRow) => {
   const ref = data["Invoice Reference"].toLowerCase();
@@ -25,6 +25,7 @@ const isOtherIgnore = (data: InvoiceRow) => {
 };
 
 const isSubscription = (data: InvoiceRow) => {
+  if (data["Invoice Reference"] === "Subscription Overpayment") debugger;
   const ref = data["Invoice Reference"];
   const regrex = /\b[A-Za-z]{1,2} \d{1,2}-\d{1,2}\b/g;
   const tested = regrex.test(ref);
@@ -52,6 +53,7 @@ function calculateMessage(
     .replace(/\s/g, "")
     .replace(/\+/g, "");
 
+  if (name === "Ashleigh Fryer") debugger;
   group.forEach((invoice) => {
     const due = new Date(invoice["Due Date"]);
 
@@ -69,7 +71,7 @@ function calculateMessage(
       return;
     }
 
-    const isOverdue = isYesterdayOrOlder(due);
+    const isOverdue = calculateDaysOverdue(due) > 0;
     if (isOverdue) {
       if (isToll(invoice)) {
         if (!ppt) {
@@ -98,8 +100,13 @@ function calculateMessage(
     }
   });
 
-  const subscriptionIsOverdue =
-    subscription.dueDate && isYesterdayOrOlder(subscription.dueDate);
+  const subscriptionDaysOverdue = subscription.dueDate
+    ? calculateDaysOverdue(subscription.dueDate)
+    : 0;
+  const subscriptionIsOverdue = subscriptionDaysOverdue > 0;
+
+  if (subscriptionDaysOverdue > 5)
+    errors.push("Subscription overdue by more than 5 business days");
 
   const grandTotal = new Decimal(toll.total)
     .plus(other.total)
